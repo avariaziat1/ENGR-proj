@@ -1,0 +1,5 @@
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+dog_pic = mpimg.imread("DogPic.jpg")
+pixel_array = np.array(dog_pic)
+print (pixel_array)
