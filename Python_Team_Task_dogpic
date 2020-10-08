@@ -1,0 +1,10 @@
+import numpy as np 
+from PIL import Image
+
+dog_picture=Image.open("Dogpic.png")
+
+sequence=dog_picture.getdata()
+
+pixel_array=np.array(sequence)
+
+print(pixel_array)
