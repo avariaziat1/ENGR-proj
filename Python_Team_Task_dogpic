@@ -2,9 +2,17 @@ import numpy as np
 import matplotlib.pyplot as mpb
 import matplotlib.image as mpbimg
 import math as m
+#These modules help me read in my image as an array, where each pixel is given an RGB color value
 
 dog_picture=mpbimg.imread("Dogpic.png")
+#This function reads in our image in its png format and converts it to an RGB array
 
 pixel_array=(np.array(dog_picture)*250)
+#This function multiplies the RGB array by 250 to appropirately scale each pixel's color value
 
-print(pixel_array)
+grsc_weight=[0.3,0.59,0.11]
+#assigns the corresponding values for each color value from the weight grayscale method to the variable
+grayscale=(pixel_array*grsc_weight)
+#multiplies the RGB array by the weight value array, converting the image to grayscale
+print(grayscale)
+#prints the image as a grayscale array
