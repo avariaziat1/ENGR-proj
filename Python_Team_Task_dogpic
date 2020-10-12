@@ -4,15 +4,15 @@ import matplotlib.image as mpbimg
 import math as m
 #These modules help me read in my image as an array, where each pixel is given an RGB color value
 
+def RGB_to_grsc(rgb):
+    return np.dot(rgb[...,:3],[0.2989,0.5870,0.1140])
+#This user-defined function uses the numpy dot function, which will later multiply the png image array matrixe by the weighted grayscale method values matrice 
 dog_picture=mpbimg.imread("Dogpic.png")
-#This function reads in our image in its png format and converts it to an RGB array
+#This reads in my png image as a numpy array
+gray=RGB_to_grsc(dog_picture)
+#This is where the png image array is multiplied by the weighted grayscale values to convert the RGB image to a grayscale image
+mpb.imshow(gray, cmap=mpb.get_cmap('gray'),vmin=0, vmax=1)
+#This uses the matplotlib cmap, short for color map, function to assign each pixel a corresponding new color value, which is now in grayscale. This function requires the name of the previous variable gray to work, as it needs to know what image to map
+mpb.show()
+#This displays the new image, now in grayscale, under the plots section in python
 
-pixel_array=(np.array(dog_picture)*250)
-#This function multiplies the RGB array by 250 to appropirately scale each pixel's color value
-
-grsc_weight=[0.3,0.59,0.11]
-#assigns the corresponding values for each color value from the weight grayscale method to the variable
-grayscale=(pixel_array*grsc_weight)
-#multiplies the RGB array by the weight value array, converting the image to grayscale
-print(grayscale)
-#prints the image as a grayscale array
