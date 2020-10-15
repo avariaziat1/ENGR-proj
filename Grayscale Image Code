@@ -1,0 +1,22 @@
+import numpy as np 
+import matplotlib.pyplot as mpb
+import matplotlib.image as mpbimg
+import math as m
+#These modules help us read in our image as an array, where each pixel is given an RGB color value
+
+dog_picture=np.array(mpbimg.imread("Dogpic.png"))
+#This reads in my png image as a numpy array
+
+grayscale=np.empty((len(dog_picture),len(dog_picture[0])))
+
+for Xpixels in range(0,len(dog_picture)):
+    for Ypixels in range(0,len(dog_picture[0])):
+        r= dog_picture[Xpixels,Ypixels,0] 
+        g= dog_picture[Xpixels,Ypixels,1] 
+        b= dog_picture[Xpixels,Ypixels,2]
+        grayscale[Xpixels][Ypixels]=r*0.2989+g*0.5870+b*0.1140
+
+
+mpb.imsave('Grayscale.png',grayscale,cmap='gray')
+#This saves the new image,now in grayscale in my computer under my team tasks folder
+
