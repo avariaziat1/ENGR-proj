@@ -7,20 +7,22 @@ Created on Thu Oct  8 10:01:00 2020
 
 import numpy as np
 import matplotlib.pyplot as plt
-#import matplotlib.image as mpimg
-file = input('Enter name of file: ')
-dog_pic = plt.imread(file)
-pixel_array = 255*np.array(dog_pic)
-#print (pixel_array)
+#file = input('Enter name of file: ')
+#file = "black&white.png"
+dog_pic = plt.imread("bwdoggo.png")
+pixel_array = np.array(dog_pic)
+pixel_array = pixel_array[:,:,0]
+#changes from 3D to 2D array
+pixel_array = 255*pixel_array
 
 new = 0
+print(pixel_array)
 #initializes new pixel value    
 
 x = pixel_array.shape
 #copies size of the original picture
 newx_array = np.zeros(x)
 #creates new empty array same size as the original picture
-
 for i in range (2, x[0]-1):
 #loops through columns of picure array
     for j in range (2, x[1]-1):
@@ -39,16 +41,17 @@ for i in range (2, x[0]-1):
         #sets value of new pixel as the added values
         new = 0
         #resets value of new for next pixel
-                
 plt.figure()
-plt.imshow(newx_array, cmap='gray')
+plt.imshow(np.uint8(newx_array))
 #plots new picture
+
+new = 0
+#initializes new pixel value 
 
 y = pixel_array.shape
 #copies size of the original picture
 newy_array = np.zeros(y)
 #creates new empty array same size as the original picture
-
 for i in range (2, y[0]-1):
 #loops through columns of picure array
     for j in range (2, y[1]-1):
@@ -67,7 +70,7 @@ for i in range (2, y[0]-1):
         #sets value of new pixel as the added values
         new = 0
         #resets value of new for next pixel
-    
+        
 plt.figure()
-plt.imshow(newy_array, cmap='gray')
+plt.imshow(np.uint8(newy_array))
 #plots new picture
