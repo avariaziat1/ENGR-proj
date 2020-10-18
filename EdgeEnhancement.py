@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 #file = input('Enter name of file: ')
 #file = "black&white.png"
-dog_pic = plt.imread("bwdoggo.png")
+dog_pic = plt.imread(input("Enter file name: "))
 pixel_array = np.array(dog_pic)
 pixel_array = pixel_array[:,:,0]
 #changes from 3D to 2D array
