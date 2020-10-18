@@ -1,0 +1,89 @@
+#import stuff
+import numpy as np
+import matplotlib.pyplot as plt
+import math as m
+
+#starting with grayscale image
+image = plt.imread('Grayscale.png')
+print(f'Shape = {image.shape}')
+print(f'Size = {image.size}')
+picture1 = plt.imshow(image)
+plt.show()
+print(image)
+print('Done!')
+
+#defining x and y arrays
+x = input('Input Sobel x array: ')
+y = input('Input Sobel y array: ')
+array_x = plt.imread(x)*255
+array_y = plt.imread(y)*255
+
+
+#in order to access each value in the 3D array, use triple for loops
+#x direction, append scalar to list
+lx = []
+for x in array_x:
+    for y in x:
+        for z in y:
+            lx.append(z)
+
+#y direction, append scalar to list    
+ly = []        
+for x in array_y:
+    for y in x:
+        for z in y:
+            ly.append(z)
+
+#calculating the f(x,y) gradient, append value to list
+l = []
+i = 0
+while i < image.size:
+    sum1 = ((lx[i])**2) + ((ly[i])**2)
+    G = m.sqrt(sum1)
+    l.append(G)
+    i += 1 
+
+#reshape the gradient list into an array
+gradient = np.array(l)
+shape = (image.shape)
+gradient_new = gradient.reshape(shape)
+print(gradient_new)
+print('Done!')
+
+# display gradient image
+picture2 = plt.imshow(np.uint8(gradient_new))
+plt.show(picture2)
+
+#creating a histogram to estimate density 
+plt.hist(l, 256, [0,256])
+plt.show()
+
+#determining thershold from histogram
+threshold_1 = 177
+
+#using threshold, set values equal to 0 or 255, append value to list
+lG = []
+for G in l:
+    if G > threshold_1:
+        G = 255
+        lG.append(G)
+    elif G < threshold_1:
+        G = 0
+        lG.append(G)
+    else:
+        G = 255
+        lG.append(G)
+
+#reshape the threshold list into an array
+threshold = np.array(lG)
+threshold_new = threshold.reshape(shape)
+print(threshold_new)
+print('Done!')
+
+#display threshold image 
+plt.imshow(np.uint8(threshold_new))
+plt.show()
+
+#save image, set image array to uint8 type
+threshold_new = np.uint8(threshold_new)
+plt.imsave('final.png', threshold_new)
