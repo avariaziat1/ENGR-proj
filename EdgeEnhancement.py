@@ -42,7 +42,7 @@ for i in range (2, x[0]-1):
         new = 0
         #resets value of new for next pixel
 plt.figure()
-plt.imshow(np.uint8(newx_array))
+plt.imshow(np.uint8(newx_array), cmap='gray')
 #plots new picture
 
 new = 0
@@ -72,5 +72,5 @@ for i in range (2, y[0]-1):
         #resets value of new for next pixel
         
 plt.figure()
-plt.imshow(np.uint8(newy_array))
+plt.imshow(np.uint8(newy_array), cmap='gray')
 #plots new picture
