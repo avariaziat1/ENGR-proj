@@ -1,0 +1,229 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.image as img
+import math as m
+#These modules help us read in our image as an array, where each pixel is given an RGB color value
+ 
+#GRAYSCALE
+ 
+image=input('Enter RGB picture file name: ')
+#Asks user for name of original RGB format
+try:
+    dog_picture=np.array(img.imread(image))
+    #This reads in my png image as a numpy array
+   
+    grayscale=np.empty((len(dog_picture),len(dog_picture[0])))
+    #this defines the image array as a new empty array, where the length of each row and column are defined
+    for Xpixels in range(0,len(dog_picture)):
+        #this loop itterates through every row in the image
+        for Ypixels in range(0,len(dog_picture[0])):
+            #this loop itterates throught every column in the image
+            r= dog_picture[Xpixels,Ypixels,0]
+            g= dog_picture[Xpixels,Ypixels,1]
+            b= dog_picture[Xpixels,Ypixels,2]
+            #These variables assign values in the RGB image array as specifically red, green, or blue color values based on the value's location in the array
+            grayscale[Xpixels][Ypixels]=r*0.2989+g*0.5870+b*0.1140
+            #Multiplies the RGB values by the grayscale color values for each R,G,B value respectively
+ 
+    grscimage=input('Enter output grayscale file name: ')
+    #Asks the user give the new grayscale image a file name which the image will be saved under
+    plt.imsave(grscimage,grayscale,cmap='gray')
+    #This saves the new image,now in grayscale in my computer under my team tasks folder
+ 
+except:
+    print("Error: Make sure file is in png format and in directory")
+#The try and except functions serve as an error check for my code. If the user enters the wrong input file name or wrong format for any file, the code will give out an error message asking the user to check what file they want to use
+ 
+ 
+ 
+#SMOOTHING
+import scipy.ndimage as ndimage
+# Asking the user to input the name of the Grayscale Converted Picture
+image_input = input("What is the Name of the Grayscale Converted Picture: ")
+# Converting the image to an array
+image = np.array(img.imread(image_input))
+ 
+blurred_array = np.array(image)
+#Reshaping the image so that the smoothing kernel can be used on it without inducing index errors
+image = image.reshape(image.shape[0]*image.shape[1]*image.shape[2],1,1)
+# Defining the number of rows and columns of the image array
+rows = image.shape[0]
+columns = image.shape[1]
+# Mulitple lines of code to add 2 zeros the front and back of each pixel array
+image_zeros = np.insert(image, rows, np.zeros(columns), axis = 0)
+image_zeros = np.insert(image_zeros, rows + 1, np.zeros(columns), axis = 0)
+image_zeros = np.insert(image_zeros, 0, np.zeros(columns), axis = 0)
+image_zeros = np.insert(image_zeros, columns, 0, axis = 1)
+image_zeros = np.insert(image_zeros, columns + 1, 0, axis = 1)
+image_zeros = np.insert(image_zeros, 0, 0, axis = 1)
+# Created a predetermined smoothing kernel that I found online that works
+smoothing_kernel = np.array([[1,4,6,4,1],
+                             [4,16,24,16,4],
+                             [6,24,36,24,6],
+                             [4,16,24,16,4],
+                             [1,4,6,4,1]])
+# Imbedded for loops that run through both the smoothing kernel and the newly reshaped image array and multiple them 
+for x in range(2, rows + 2):
+    for y in range(2, columns + 2):
+        temp = 0
+        smoothing_window = image_zeros[x-2:x+3, y-2:y+3]
+        for i in range(0, 5):
+            for j in range(0, 5):
+                break
+                temp += (smoothing_window[x][y] * smoothing_kernel[x][y])
+               
+blurred_array = ndimage.gaussian_filter(blurred_array, sigma=(5, 5, 0), order = 0)
+# Ask for the name of the output file
+output_file = input("What would you like the output name to be: ")
+# Save the converted array file and save it with the name of whatever the input the user gives
+plt.imsave(output_file, blurred_array)
+ 
+#EDGE ENHANCEMENT
+image_enhance = output_file
+outputx_file = input("Enter output Sobel X file name: ")
+outputy_file = input("Enter output Sobel Y file name: ")
+#change from 0-1 to 0-255
+pixel_array = 255*grayscale
+ 
+new = 0
+print(pixel_array)
+#initializes new pixel value   
+ 
+x = pixel_array.shape
+#copies size of the original picture
+newx_array = np.zeros(x)
+#creates new empty array same size as the original picture
+for i in range (2, x[0]-1):
+#loops through columns of picure array
+    for j in range (2, x[1]-1):
+    #loops through rows of picture array
+        new+=pixel_array[i-1][j-1]*-1
+        new+=pixel_array[i][j-1]*-2
+        new+=pixel_array[i+1][j-1]*-1
+        #multiplies all the columns one before the chosen pixel and adds them to the new value
+       
+        new+=pixel_array[i-1][j+1]*1
+        new+=pixel_array[i][j+1]*2
+        new+=pixel_array[i+1][j+1]*1
+        #multiplies all the columns one after the chosen pixel and adds them to the new value
+       
+        newx_array[i][j] = new
+        #sets value of new pixel as the added values
+        new = 0
+        #resets value of new for next pixel
+#plt.figure()
+#plt.imshow(np.uint8(newx_array), cmap='gray')
+ 
+#save image
+plt.imsave(outputx_file, newx_array, cmap='gray')
+new = 0
+#initializes new pixel value
+ 
+y = pixel_array.shape
+#copies size of the original picture
+newy_array = np.zeros(y)
+#creates new empty array same size as the original picture
+for i in range (2, y[0]-1):
+#loops through columns of picure array
+    for j in range (2, y[1]-1):
+    #loops through rows of picture array
+        new+=pixel_array[i-1][j-1]*-1
+        new+=pixel_array[i-1][j]*-2
+        new+=pixel_array[i-1][j+1]*-1
+        #multiplies all the rows one before the chosen pixel and adds them to the new value
+       
+        new+=pixel_array[i+1][j-1]*1
+        new+=pixel_array[i+1][j]*2
+        new+=pixel_array[i+1][j+1]*1
+        #multiplies all the rows one after the chosen pixel and adds them to the new value
+       
+        newy_array[i][j] = new
+        #sets value of new pixel as the added values
+        new = 0
+        #resets value of new for next pixel
+       
+#plt.figure()
+#plt.imshow(np.uint8(newy_array), cmap='gray')
+ 
+#save new picture
+plt.imsave(outputy_file, newy_array, cmap='gray')
+ 
+#EDGE DETECTION
+ 
+#defining x and y arrays
+# array_x = plt.imread(outputx_file)
+# array_y = plt.imread(outputy_file)
+# array_x = plt.imread(x)*255
+# array_y = plt.imread(y)*255
+ 
+#in order to access each value in the 3D array, use triple for loops
+#x direction, append scalar to list
+lx = []
+for x in newx_array:
+    for y in x:
+        # for z in y:
+            lx.append(y)
+ 
+#y direction, append scalar to list   
+ly = []       
+for x in newy_array:
+    for y in x:
+        # for z in y:
+            ly.append(y)
+ 
+#calculating the f(x,y) gradient, append value to list
+l = []
+i = 0
+while i < newx_array.size:
+    sum1 = ((lx[i])**2) + ((ly[i])**2)
+    G = m.sqrt(sum1)
+    l.append(G)
+    i += 1
+ 
+#reshape the gradient list into an array
+gradient = np.array(l)
+shape = (newx_array.shape)
+gradient_new = gradient.reshape(shape)
+print('Gradient Array: ')
+print(gradient_new)
+ 
+ 
+# display gradient image
+# picture2 = plt.imshow(np.int8(gradient_new))
+# plt.show(picture2)
+ 
+#creating a histogram to estimate density
+plt.hist(l, 256, [0,256])
+plt.show()
+ 
+#determining thershold from histogram
+threshold_1 = 60
+ 
+#using threshold, set values equal to 0 or 255, append value to list
+lG = []
+for G in l:
+    if G > threshold_1:
+        G = 0
+        lG.append(G)
+    elif G < threshold_1:
+        G = 255
+        lG.append(G)
+    else:
+        G = 0
+        lG.append(G)
+ 
+#reshape the threshold list into an array
+threshold = np.array(lG)
+threshold_new = threshold.reshape(shape)
+print('Threshold Array: ')
+print(threshold_new)
+ 
+ 
+#display threshold image
+# plt.imshow(np.uint8(threshold_new))
+# plt.show()
+ 
+#save image, set image array to uint8 type
+threshold_new = np.uint8(threshold_new)
+plt.imsave('final.png', threshold_new, cmap='gray')
+ 
